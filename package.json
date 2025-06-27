@@ -4,15 +4,20 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && sanity schema extract",
+    "build:next": "next build",
+    "build:sanity": "sanity schema extract",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@sanity/vision": "^3.93.0",
     "next": "14.0.0",
+    "posthog-js": "1.254.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "posthog-js": "1.254.0"
+    "sanity": "^3.93.0",
+    "styled-components": "^6.1.19"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
@@ -25,4 +30,4 @@
   "engines": {
     "node": ">=18.0.0"
   }
-} 
+}

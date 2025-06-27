@@ -1,16 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
-    // This might trigger esbuild-register scenarios
+    // This will trigger esbuild-register scenarios during Sanity config processing
     serverComponentsExternalPackages: ['posthog-js']
-  },
-  // Ensure we're using the environment that might cause issues
-  webpack: (config, { isServer }) => {
-    // This configuration might trigger the problematic environment
-    if (isServer) {
-      config.externals = [...config.externals, 'posthog-js']
-    }
-    return config
   }
 }
 
