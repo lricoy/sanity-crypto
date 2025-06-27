@@ -1,13 +1,7 @@
 {
   "version": 2,
   "buildCommand": "npm run build",
-  "outputDirectory": ".next",
   "framework": "nextjs",
-  "functions": {
-    "app/**": {
-      "runtime": "nodejs20.x"
-    }
-  },
   "build": {
     "env": {
       "NODE_ENV": "production"
