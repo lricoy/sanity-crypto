@@ -21,8 +21,8 @@ export default defineConfig({
   name: 'default',
   title: 'Sanity + PostHog Crypto Issue Demo',
   
-  // Use a valid project ID format (this will still fail but with crypto error first)
-  projectId: 'abc12345',
+  // Use your real Sanity project ID
+  projectId: 'cv9aryrp',
   dataset: 'production',
   
   plugins: [visionTool()],
