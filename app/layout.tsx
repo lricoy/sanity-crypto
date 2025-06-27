@@ -2,6 +2,13 @@
 
 import { PostHogProvider } from 'posthog-js/react'
 
+const POSTHOG_API_KEY = process.env.NEXT_PUBLIC_POSTHOG_API_KEY
+
+// Fail early if no API key is provided
+if (!POSTHOG_API_KEY) {
+  throw new Error('NEXT_PUBLIC_POSTHOG_API_KEY environment variable is required')
+}
+
 export default function RootLayout({
   children,
 }: {
@@ -11,7 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <PostHogProvider 
-          apiKey="phc_test_key_for_reproduction"
+          apiKey={POSTHOG_API_KEY}
           options={{
             api_host: 'https://app.posthog.com',
             // This will trigger UUID generation during initialization

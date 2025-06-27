@@ -1,27 +1,17 @@
 import { defineConfig } from 'sanity'
 import { visionTool } from '@sanity/vision'
 
-// This import will trigger the crypto error during Vercel's build process
-// exactly like in real projects that use PostHog with Sanity
-import { trackSanityEvent, posthog } from './lib/posthog'
+import { posthog } from 'posthog-js'
 
-// This call happens during config loading and will trigger the crypto error
-// This is exactly how real projects fail - PostHog gets initialized during config processing
-trackSanityEvent('sanity_config_loading', { 
-  timestamp: Date.now(),
-  environment: process.env.NODE_ENV || 'development'
+// throw away project
+posthog.init('phc_rYGjlO1TRm2LhHZlfhWMfkxIATN1pM4tZvwu4iPv6jf', {
+  api_host: 'https://app.posthog.com',
 })
-
-// Force additional PostHog calls that trigger UUID generation
-// These will fail in Vercel's esbuild-register environment
-const sessionId = posthog.get_session_id()
-const distinctId = posthog.get_distinct_id()
 
 export default defineConfig({
   name: 'default',
   title: 'Sanity + PostHog Crypto Issue Demo',
   
-  // Use your real Sanity project ID
   projectId: 'cv9aryrp',
   dataset: 'production',
   

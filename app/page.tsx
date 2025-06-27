@@ -41,13 +41,15 @@ const AppLinkWithParams = ({ children }: { children: React.ReactNode }) => {
   }
 
   const queryString = new URLSearchParams(allParams).toString()
+  const currentUrl = typeof window !== 'undefined' ? window.location.href : ''
+  const baseUrl = currentUrl.includes('localhost') ? "http://localhost:3000" : "https://repro-vercel-crypto-issue-ftdk37mby-lucas-ricoys-projects.vercel.app"
   const href = queryString
-    ? `https://app.example.com/?${queryString}`
-    : "https://app.example.com/"
+    ? `${baseUrl}/?${queryString}`
+    : baseUrl
 
   return (
-    <a 
-      href={href} 
+    <a
+      href={href}
       className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
       target="_blank"
       rel="noopener noreferrer"
@@ -66,9 +68,9 @@ export default function HomePage() {
     // This will trigger PostHog's UUID generation during SSR/build
     // Exactly like the pattern that causes the Sanity build failure
     if (posthog) {
-      const session = posthog.get_session_id()
-      const distinct = posthog.get_distinct_id()
-      
+      const session = posthog?.get_session_id()
+      const distinct = posthog?.get_distinct_id()
+
       setSessionId(session || '')
       setDistinctId(distinct || '')
     }
@@ -77,7 +79,7 @@ export default function HomePage() {
   return (
     <main className="container mx-auto p-8">
       <h1 className="text-3xl font-bold mb-6">Sanity + PostHog Crypto Issue</h1>
-      
+
       <div className="space-y-4">
         <div className="p-4 border rounded">
           <h2 className="text-xl font-semibold mb-2">PostHog Data</h2>
@@ -94,26 +96,21 @@ export default function HomePage() {
             Go to App with PostHog Params
           </AppLinkWithParams>
         </div>
-        
-        <div className="p-4 border rounded bg-red-50">
-          <h2 className="text-xl font-semibold mb-2 text-red-700">Expected Build Error</h2>
-          <code className="text-sm text-red-600 block whitespace-pre-wrap">
-{`Error: Failed to load configuration file "/vercel/path0/sanity.config.ts"
-Caused by:
-ReferenceError: crypto is not defined
-at Object.<anonymous> (~/node_modules/posthog-js/src/uuidv7.ts:222:46)
-at Object.newLoader [as .js] (~/node_modules/esbuild-register/dist/node.js:2262:9)`}
-          </code>
-        </div>
-        
-        <div className="p-4 border rounded bg-yellow-50">
-          <h2 className="text-xl font-semibold mb-2 text-yellow-700">Root Cause</h2>
-          <p className="text-sm">
-            Sanity's build process uses esbuild-register which creates an environment where 
-            window.crypto exists but global crypto is undefined. PostHog's uuidv7.ts checks 
-            window.crypto but then uses global crypto, causing the failure.
+
+        <div className="p-4 border rounded bg-blue-50">
+          <h2 className="text-xl font-semibold mb-2 text-blue-700">Test Different Rendering Modes</h2>
+          <p className="mb-3 text-sm">
+            Test PostHog + crypto behavior across different Next.js rendering strategies:
           </p>
+          <div className="space-y-2">
+            <ul>
+              <li><a href="/ssr" className="block text-blue-600 hover:underline">SSR (Server-Side Rendering) Test</a></li>
+              <li><a href="/edge" className="block text-blue-600 hover:underline">Edge Runtime Test</a></li>
+              <li><a href="/isr" className="block text-blue-600 hover:underline">ISR (Incremental Static Regeneration) Test</a></li>
+            </ul>
+          </div>
         </div>
+
       </div>
     </main>
   )
